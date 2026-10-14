@@ -176,3 +176,8 @@ $transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 :host-context(body.theme-light) .input-card select {
   color: #172132;
 }
+
+:host-context(body.theme-light) .input-card .input-with-currency .currency-tag {
+  color: #713b00;
+  background: #fff0d2;
+}

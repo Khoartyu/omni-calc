@@ -143,3 +143,7 @@ $transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     max-width: 480px;
   }
 }
+
+:host-context(body.theme-light) .graph-search-bar .fn-symbol {
+  color: #713b00;
+}
