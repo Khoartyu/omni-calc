@@ -1,0 +1,107 @@
+<aside class="calc-glass-sidebar" aria-label="Lịch sử tính toán">
+  <div class="sidebar-header">
+    <div class="header-title-wrap">
+      <span class="clock-icon">🕒</span>
+      <h2 class="title">Lịch Sử Tính</h2>
+      <span class="count-badge">{{ visibleHistory().length }}</span>
+    </div>
+
+    <div class="header-actions-wrap">
+      @if (calcService.history().length > 0) {
+        <button 
+          type="button" 
+          class="btn-action-pill btn-export" 
+          (click)="onExportCSV()"
+          title="Xuất file Excel CSV"
+        >
+          <span>📥 CSV</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="btn-action-pill btn-json" 
+          (click)="onExportJSON()"
+          title="Xuất file JSON"
+        >
+          <span>🧾 JSON</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="btn-action-icon btn-clear" 
+          (click)="onClearHistory()"
+          title="Xóa toàn bộ lịch sử"
+        >
+          <span>🗑️</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <label class="history-search">
+    <span aria-hidden="true">⌕</span>
+    <input type="search" placeholder="Tìm phép tính, nhãn, ghi chú..." [value]="searchQuery()" (input)="searchQuery.set($any($event.target).value)">
+  </label>
+
+  <!-- DANH SÁCH CUỘN CÁC MỤC LỊCH SỬ -->
+  <div class="sidebar-scroll-list">
+    @for (item of visibleHistory(); track item.id) {
+      <article class="history-card-item">
+        <button type="button" class="history-main-button" (click)="onSelectHistory(item)">
+          <div class="item-meta-row">
+            <span 
+              class="mode-badge-tag"
+              [class.tag-sci]="item.mode === 'casio580'"
+              [class.tag-tax]="item.mode === 'tax'"
+              [class.tag-fin]="item.mode === 'financial'"
+            >
+              {{ item.mode ? item.mode.toUpperCase() : 'STANDARD' }}
+            </span>
+            <time class="meta-time">{{ item.timestamp | date:'HH:mm:ss dd/MM' }}</time>
+          </div>
+          <div class="item-expr-row">{{ item.expression }} =</div>
+          <div class="item-result-row">{{ item.result }}</div>
+          <div class="item-hover-actions"><span class="reuse-action">Nạp lại ↵</span></div>
+        </button>
+
+        <div class="history-personal-fields">
+          <div class="tag-list">
+            @for (tag of item.tags ?? []; track tag) {
+              <span class="history-tag">
+                {{ tag }}
+                <button type="button" (click)="removeTag(item, tag, $event)" [attr.aria-label]="'Xóa nhãn ' + tag">×</button>
+              </span>
+            }
+            <input class="tag-input" type="text" placeholder="+ Nhãn, Enter để lưu" aria-label="Thêm nhãn" (keydown.enter)="addTag(item, $event)">
+          </div>
+          <input class="note-input" type="text" placeholder="Thêm ghi chú..." [value]="item.note ?? ''" aria-label="Ghi chú phép tính" (change)="updateNote(item, $event)">
+        </div>
+      </article>
+    } @empty {
+      @if (searchQuery().trim()) {
+        <div class="history-empty-illustration">
+          <h4 class="empty-head">Không tìm thấy phép tính</h4>
+          <p class="empty-desc">Thử từ khóa hoặc nhãn khác.</p>
+        </div>
+      } @else {
+        <div class="history-empty-illustration">
+          <div class="empty-graphic">📜</div>
+          <h4 class="empty-head">Chưa Có Phép Tính Nào</h4>
+          <p class="empty-desc">Phép tính và ghi chú được lưu trên thiết bị này. Bạn có thể tìm kiếm, thêm nhãn hoặc xuất CSV.</p>
+        </div>
+      }
+    }
+  </div>
+
+  <div class="sidebar-footer">
+    <span class="footer-note">Lưu trên thiết bị • Nhãn & ghi chú • Xuất CSV</span>
+  </div>
+</aside>
+
+<!-- TOAST PHẢN HỒI -->
+@if (toastMessage()) {
+  <div class="toast-glass-notification" role="status" aria-live="polite">
+    <span class="toast-check">✓</span>
+    <span class="toast-text">{{ toastMessage() }}</span>
+  </div>
+}

@@ -1,0 +1,19 @@
+{
+  "id": "/",
+  "name": "OmniCalc - Máy tính cá nhân",
+  "short_name": "OmniCalc",
+  "description": "Máy tính cá nhân với công thức, lịch sử riêng và khả năng hoạt động offline.",
+  "start_url": "/standard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#101014",
+  "theme_color": "#101014",
+  "icons": [
+    {
+      "src": "/omni-calc.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

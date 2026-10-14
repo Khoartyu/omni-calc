@@ -19,8 +19,10 @@
     "@angular/platform-browser": "^22.1.0",
     "@angular/platform-server": "^22.1.0",
     "@angular/router": "^22.1.0",
+    "@angular/service-worker": "^22.2.1",
     "@angular/ssr": "^22.1.5",
     "express": "^5.1.0",
+    "mathjs": "^15.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

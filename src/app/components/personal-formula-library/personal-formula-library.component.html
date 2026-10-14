@@ -1,0 +1,98 @@
+<button type="button" class="formula-open-button" (click)="open()" title="Mở công thức cá nhân">
+  <span aria-hidden="true">ƒx</span>
+  <span>Công thức</span>
+</button>
+
+@if (isOpen()) {
+  <div class="formula-backdrop" (click)="close()">
+    <section class="formula-dialog" role="dialog" aria-modal="true" aria-labelledby="formula-title" (click)="$event.stopPropagation()">
+      <header class="dialog-header">
+        <div>
+          <span class="dialog-kicker">KHÔNG GIAN CÁ NHÂN</span>
+          <h2 id="formula-title">Thư viện công thức</h2>
+        </div>
+        <button type="button" class="close-button" (click)="close()" aria-label="Đóng thư viện công thức">×</button>
+      </header>
+
+      <div class="formula-layout">
+        <div class="formula-column">
+          <form class="formula-create-form" (ngSubmit)="saveFormula()">
+            <h3>Lưu công thức mới</h3>
+            <label>
+              Tên công thức
+              <input name="formulaName" [(ngModel)]="formulaName" placeholder="Ví dụ: Lãi kép" required>
+            </label>
+            <label>
+              Biểu thức
+              <input name="formulaExpression" [(ngModel)]="formulaExpression" placeholder="P * (1 + r / n) ^ (n * t)" required>
+            </label>
+            <label>
+              Biến, phân tách bằng dấu phẩy
+              <input name="formulaVariables" [(ngModel)]="formulaVariables" placeholder="P, r, n, t">
+            </label>
+            <p class="formula-help">Hỗ trợ +, -, ×, ÷, lũy thừa và hàm sin, cos, sqrt, log, min, max.</p>
+            <button class="primary-button" type="submit">Lưu vào thư viện</button>
+          </form>
+
+          <section class="saved-formulas" aria-label="Công thức đã lưu">
+            <div class="section-heading">
+              <h3>Đã lưu</h3>
+              <span>{{ formulaService.formulas().length }}</span>
+            </div>
+            @for (formula of formulaService.formulas(); track formula.id) {
+              <article class="formula-row" [class.is-selected]="selectedFormula()?.id === formula.id">
+                <button type="button" class="formula-select" (click)="selectFormula(formula)">
+                  <div class="formula-title-row">
+                    <strong>{{ formula.name }}</strong>
+                    <span class="favorite-star" [class.is-favorite]="formula.favorite">{{ formula.favorite ? '★' : '☆' }}</span>
+                  </div>
+                  <code>{{ formula.expression }}</code>
+                </button>
+                <div class="formula-action-buttons">
+                  <button type="button" class="favorite-button" (click)="toggleFavorite($event, formula.id)" [attr.aria-label]="formula.favorite ? 'Bỏ ghim công thức' : 'Ghim công thức'" title="Ghim công thức">
+                    {{ formula.favorite ? '★' : '☆' }}
+                  </button>
+                  <button type="button" class="delete-button" (click)="deleteFormula($event, formula.id)" [attr.aria-label]="'Xóa ' + formula.name" title="Xóa công thức">×</button>
+                </div>
+              </article>
+            } @empty {
+              <p class="empty-state">Chưa có công thức. Lưu công thức đầu tiên ở trên.</p>
+            }
+          </section>
+        </div>
+
+        <section class="formula-run-column" aria-label="Tính công thức đã chọn">
+          @if (selectedFormula(); as formula) {
+            <span class="dialog-kicker">TÍNH LẠI</span>
+            <h3>{{ formula.name }}</h3>
+            <code class="expression-preview">{{ formula.expression }}</code>
+            @for (variable of formula.variables; track variable) {
+              <label>
+                <span>{{ variable }}</span>
+                <input type="number" [name]="'value-' + variable" [(ngModel)]="variableValues()[variable]" step="any" placeholder="Nhập {{ variable }}">
+              </label>
+            } @empty {
+              <p class="formula-help">Công thức này không cần biến đầu vào.</p>
+            }
+            <button type="button" class="primary-button" (click)="calculate()">Tính công thức</button>
+            @if (result()) {
+              <div class="result-output" aria-live="polite">
+                <span>KẾT QUẢ</span>
+                <strong>{{ result() }}</strong>
+                <button type="button" class="apply-button" (click)="applyResult()">Dùng trên máy tính</button>
+              </div>
+            }
+          } @else {
+            <div class="run-empty-state">
+              <span aria-hidden="true">ƒx</span>
+              <p>Chọn công thức đã lưu để nhập biến và tính lại.</p>
+            </div>
+          }
+          @if (errorMessage()) {
+            <p class="error-message" role="alert">{{ errorMessage() }}</p>
+          }
+        </section>
+      </div>
+    </section>
+  </div>
+}

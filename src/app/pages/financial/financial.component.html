@@ -1,0 +1,133 @@
+<div class="page-container">
+  <!-- KHUNG KẾ TOÁN & TÀI CHÍNH CHÍNH -->
+  <main class="calc-glass-card">
+    
+    <div class="sub-segmented-control">
+      <button 
+        type="button" 
+        class="sub-tab-btn" 
+        [class.active]="financialTab() === 'vat'"
+        (click)="financialTab.set('vat')"
+      >
+        <span>📊 Tính Thuế VAT</span>
+      </button>
+      <button 
+        type="button" 
+        class="sub-tab-btn" 
+        [class.active]="financialTab() === 'compound'"
+        (click)="financialTab.set('compound')"
+      >
+        <span>📈 Tính Lãi Kép & Tiết Kiệm</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: THUẾ VAT -->
+    @if (financialTab() === 'vat') {
+      <div class="fin-card-content">
+        <div class="form-grid-two">
+          <div class="input-card">
+            <label for="vatAmountInput">Số tiền chưa thuế (VND):</label>
+            <div class="input-with-currency">
+              <input 
+                id="vatAmountInput" 
+                type="number" 
+                [ngModel]="vatBaseAmount()" 
+                (ngModelChange)="vatBaseAmount.set($event)" 
+                step="500000"
+              />
+              <span class="currency-tag">VND</span>
+            </div>
+          </div>
+
+          <div class="input-card">
+            <label for="vatSelectRate">Thuế suất VAT:</label>
+            <select 
+              id="vatSelectRate" 
+              [ngModel]="vatRatePercent()" 
+              (ngModelChange)="vatRatePercent.set($event)"
+            >
+              <option [value]="5">5% - Nông sản, thiết bị y tế</option>
+              <option [value]="8">8% - Chính sách giảm thuế kích cầu</option>
+              <option [value]="10">10% - Mức thuế suất phổ thông</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="fin-summary-card">
+          <div class="fin-data-row">
+            <span class="data-label">Tiền thuế GTGT (VAT):</span>
+            <strong class="data-value text-orange">{{ vatReport().vatAmount | number:'1.0-0' }} đ</strong>
+          </div>
+          <div class="fin-data-row total-highlight">
+            <span class="data-label">Tổng thanh toán (Sau thuế):</span>
+            <strong class="data-value text-success">{{ vatReport().totalWithVat | number:'1.0-0' }} đ</strong>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- TAB 2: LÃI KÉP TIẾT KIỆM -->
+    @if (financialTab() === 'compound') {
+      <div class="fin-card-content">
+        <div class="form-grid-three">
+          <div class="input-card">
+            <label for="cPrincipal">Số tiền gửi ban đầu:</label>
+            <div class="input-with-currency">
+              <input 
+                id="cPrincipal" 
+                type="number" 
+                [ngModel]="compPrincipal()" 
+                (ngModelChange)="compPrincipal.set($event)" 
+                step="5000000"
+              />
+              <span class="currency-tag">VND</span>
+            </div>
+          </div>
+
+          <div class="input-card">
+            <label for="cRate">Lãi suất (%/năm):</label>
+            <div class="input-with-currency">
+              <input 
+                id="cRate" 
+                type="number" 
+                [ngModel]="compRate()" 
+                (ngModelChange)="compRate.set($event)" 
+                step="0.1"
+              />
+              <span class="currency-tag">%</span>
+            </div>
+          </div>
+
+          <div class="input-card">
+            <label for="cYears">Kỳ hạn gửi (năm):</label>
+            <div class="input-with-currency">
+              <input 
+                id="cYears" 
+                type="number" 
+                [ngModel]="compYears()" 
+                (ngModelChange)="compYears.set($event)" 
+                min="1" 
+                max="40"
+              />
+              <span class="currency-tag">Năm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fin-summary-card">
+          <div class="fin-data-row">
+            <span class="data-label">Tổng tiền lãi tích lũy:</span>
+            <strong class="data-value text-orange">+{{ compoundReport().totalInterest | number:'1.0-0' }} đ</strong>
+          </div>
+          <div class="fin-data-row total-highlight">
+            <span class="data-label">Tổng nhận về (Gốc + Lãi kép):</span>
+            <strong class="data-value text-success">{{ compoundReport().futureValue | number:'1.0-0' }} đ</strong>
+          </div>
+        </div>
+      </div>
+    }
+  </main>
+
+  <!-- LỊCH SỬ BÊN PHẢI -->
+  <app-history-sidebar />
+</div>

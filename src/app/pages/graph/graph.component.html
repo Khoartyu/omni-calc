@@ -1,0 +1,46 @@
+<div class="page-container">
+  <!-- KHUNG VẼ ĐỒ THỊ CHÍNH -->
+  <main class="calc-glass-card">
+    <div class="section-intro-card">
+      <div class="intro-icon">📈</div>
+      <div>
+        <h3 class="intro-title">Vẽ Đồ Thị Hàm Số 2D (Oxy)</h3>
+        <p class="intro-subtitle">Dựng hệ trục toạ độ Descartes và nội suy đường cong trên HTML5 Canvas</p>
+      </div>
+    </div>
+
+    <!-- BỘ HÀM MẪU DẠNG PILLS -->
+    <div class="presets-pill-group">
+      <span class="preset-title">Hàm mẫu:</span>
+      <button type="button" class="preset-pill" (click)="selectPresetGraph('x^2 - 4')">y = x² - 4</button>
+      <button type="button" class="preset-pill" (click)="selectPresetGraph('sin(x)')">y = sin(x)</button>
+      <button type="button" class="preset-pill" (click)="selectPresetGraph('x^3 - 3*x')">y = x³ - 3x</button>
+      <button type="button" class="preset-pill" (click)="selectPresetGraph('2*x + 1')">y = 2x + 1</button>
+    </div>
+
+    <!-- THANH NHẬP HÀM SỐ VÀ NÚT VẼ -->
+    <div class="graph-search-bar">
+      <span class="fn-symbol">f(x) =</span>
+      <input 
+        type="text" 
+        [ngModel]="graphExpression()" 
+        (ngModelChange)="graphExpression.set($event)" 
+        (keyup.enter)="renderGraph()"
+        placeholder="Nhập biểu thức hàm số..."
+      />
+      <button type="button" class="btn-primary-draw" (click)="renderGraph()">
+        <span>Vẽ Lại</span>
+        <span>🎨</span>
+      </button>
+    </div>
+
+    <!-- KHUNG CANVAS ĐỒ HỌA -->
+    <div class="canvas-viewport-frame">
+      <canvas #graphCanvas width="420" height="280"></canvas>
+      <div class="canvas-axes-badge">Phạm vi toạ độ: x, y ∈ [-8, 8]</div>
+    </div>
+  </main>
+
+  <!-- LỊCH SỬ BÊN PHẢI -->
+  <app-history-sidebar />
+</div>

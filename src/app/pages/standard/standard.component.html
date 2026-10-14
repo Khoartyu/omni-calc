@@ -1,0 +1,87 @@
+<div class="page-container">
+  <!-- MÁY TÍNH TIÊU CHUẨN CHÍNH -->
+  <main class="calc-glass-card">
+    <header class="card-status-header">
+      <div class="brand-group">
+        <span class="status-pulse-dot"></span>
+        <span class="brand-name">OmniCalc</span>
+        <span class="badge-mode-pill">STANDARD</span>
+      </div>
+
+      <div class="action-buttons-group">
+        <app-personal-formula-library />
+        <button 
+          type="button" 
+          class="btn-icon-round" 
+          (click)="audioService.toggleSound()"
+          [title]="audioService.isSoundEnabled() ? 'Tắt âm thanh' : 'Bật âm thanh'"
+        >
+          {{ audioService.isSoundEnabled() ? '🔊' : '🔇' }}
+        </button>
+      </div>
+    </header>
+
+    <!-- MÀN HÌNH OLED -->
+    <div class="oled-display-screen" (click)="copyResult()" title="Nhấp vào để sao chép kết quả">
+      <div class="display-top-bar">
+        <div class="indicators-left">
+          @if (calcService.isMemoryActive()) {
+            <span class="lcd-badge memory-glow">M={{ calcService.memory() }}</span>
+          }
+        </div>
+        <button type="button" class="btn-copy-chip" (click)="$event.stopPropagation(); copyResult()">
+          <span>Sao chép</span>
+          <span class="copy-icon">⎘</span>
+        </button>
+      </div>
+
+      <div class="display-expression-row">
+        {{ calcService.expression() || '&nbsp;' }}
+      </div>
+
+      <div class="display-result-row" [class.error-glow]="calcService.currentValue().includes('Lỗi') || calcService.currentValue().includes('Không thể')">
+        {{ calcService.currentValue() }}
+      </div>
+    </div>
+
+    <!-- BÀN PHÍM TÍNH TOÁN 3D TACTILE -->
+    <div class="tactile-keypad-grid" role="group" aria-label="Bàn phím tiêu chuẩn">
+      <button type="button" class="key-btn key-mem" (click)="calcService.memoryClear()" [disabled]="!calcService.isMemoryActive()">MC</button>
+      <button type="button" class="key-btn key-mem" (click)="calcService.memoryRead()" [disabled]="!calcService.isMemoryActive()">MR</button>
+      <button type="button" class="key-btn key-mem" (click)="calcService.memorySub()">M-</button>
+      <button type="button" class="key-btn key-mem" (click)="calcService.memoryAdd()">M+</button>
+
+      <button type="button" class="key-btn key-fn key-ac" (click)="calcService.clearAll()">AC</button>
+      <button type="button" class="key-btn key-fn" (click)="calcService.clear()">CE</button>
+      <button type="button" class="key-btn key-fn" (click)="calcService.deleteLast()">⌫</button>
+      <button type="button" class="key-btn key-op" (click)="calcService.setOperator('÷')">÷</button>
+
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('7')">7</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('8')">8</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('9')">9</button>
+      <button type="button" class="key-btn key-op" (click)="calcService.setOperator('×')">×</button>
+
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('4')">4</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('5')">5</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('6')">6</button>
+      <button type="button" class="key-btn key-op" (click)="calcService.setOperator('-')">-</button>
+
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('1')">1</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('2')">2</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('3')">3</button>
+      <button type="button" class="key-btn key-op" (click)="calcService.setOperator('+')">+</button>
+
+      <button type="button" class="key-btn key-fn" (click)="calcService.toggleSign()">±</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('0')">0</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('.')">.</button>
+      <button type="button" class="key-btn key-equals" (click)="calcService.calculate()">=</button>
+    </div>
+
+    <footer class="tactile-footer-hints">
+      <span>⌨️ Bàn phím số & Numpad • 🔊 Âm thanh Web Audio API • ⎘ Nhấp số để copy</span>
+    </footer>
+  </main>
+
+  <!-- LỊCH SỬ BÊN PHẢI -->
+  <app-history-sidebar />
+</div>

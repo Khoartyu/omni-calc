@@ -1,0 +1,124 @@
+<div class="page-container">
+  <!-- KHUNG TÍNH THUẾ TNCN CHÍNH -->
+  <main class="calc-glass-card">
+    <div class="section-intro-card">
+      <div class="intro-icon">🏛️</div>
+      <div>
+        <h3 class="intro-title">Thuế Thu Nhập Cá Nhân (TNCN)</h3>
+        <p class="intro-subtitle">Tự động tính theo biểu thuế lũy tiến 7 bậc của Luật Thuế TNCN Việt Nam</p>
+      </div>
+    </div>
+
+    <!-- FORM NHẬP LIỆU -->
+    <div class="tax-input-cards-grid">
+      <div class="input-card">
+        <label for="grossInput">
+          <span class="icon">💵</span>
+          <span>Thu nhập tháng (Gross):</span>
+        </label>
+        <div class="input-with-currency">
+          <input 
+            id="grossInput" 
+            type="number" 
+            [ngModel]="taxGross()" 
+            (ngModelChange)="taxGross.set($event)" 
+            step="1000000"
+          />
+          <span class="currency-tag">VND</span>
+        </div>
+        <span class="input-helper">{{ taxGross() | number:'1.0-0' }} đ / tháng</span>
+      </div>
+
+      <div class="input-card">
+        <label for="depInput">
+          <span class="icon">👥</span>
+          <span>Người phụ thuộc:</span>
+        </label>
+        <div class="input-with-currency">
+          <input 
+            id="depInput" 
+            type="number" 
+            [ngModel]="taxDependentsCount()" 
+            (ngModelChange)="taxDependentsCount.set($event)" 
+            min="0" 
+            max="15"
+          />
+          <span class="currency-tag">Người</span>
+        </div>
+        <span class="input-helper">Giảm trừ: {{ (taxDependentsCount() * 4400000) | number:'1.0-0' }} đ</span>
+      </div>
+
+      <div class="input-card">
+        <label for="insInput">
+          <span class="icon">🛡️</span>
+          <span>Bảo hiểm bắt buộc (10.5%):</span>
+        </label>
+        <div class="input-with-currency">
+          <input 
+            id="insInput" 
+            type="number" 
+            [ngModel]="taxInsuranceAmount()" 
+            (ngModelChange)="taxInsuranceAmount.set($event)" 
+            step="500000"
+          />
+          <span class="currency-tag">VND</span>
+        </div>
+        <span class="input-helper">BHXH 8%, BHYT 1.5%, BHTN 1%</span>
+      </div>
+    </div>
+
+    <!-- 3 THẺ TỔNG KẾT TÀI CHÍNH LỚN -->
+    <div class="tax-metrics-dashboard">
+      <div class="metric-box">
+        <span class="metric-title">Thu nhập tính thuế</span>
+        <span class="metric-number text-muted-white">{{ taxReport().taxableIncome | number:'1.0-0' }} đ</span>
+        <span class="metric-sub">Sau khi trừ 11M + Phụ thuộc</span>
+      </div>
+
+      <div class="metric-box box-danger">
+        <span class="metric-title">Thuế TNCN phải nộp</span>
+        <span class="metric-number text-danger">{{ taxReport().totalTax | number:'1.0-0' }} đ</span>
+        <span class="metric-sub">Tổng 7 bậc lũy tiến</span>
+      </div>
+
+      <div class="metric-box box-success">
+        <span class="metric-title">Lương thực nhận (Net)</span>
+        <span class="metric-number text-success">{{ taxReport().netIncome | number:'1.0-0' }} đ</span>
+        <span class="metric-sub">Số tiền về tài khoản ATM</span>
+      </div>
+    </div>
+
+    <!-- BẢNG BIỂU THUẾ 7 BẬC -->
+    <div class="glass-table-wrapper">
+      <table class="modern-tax-table">
+        <thead>
+          <tr>
+            <th>Bậc</th>
+            <th>Phạm vi thu nhập</th>
+            <th>Thuế suất</th>
+            <th class="text-right">Tiền thuế nộp</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (b of taxReport().brackets; track b.bracket) {
+            <tr [class.highlight-row]="b.taxableAmount > 0">
+              <td>
+                <span class="bracket-badge">Bậc {{ b.bracket }}</span>
+              </td>
+              <td>{{ b.taxableAmount | number:'1.0-0' }} đ</td>
+              <td>
+                <span class="rate-pill">{{ b.rate }}%</span>
+              </td>
+              <td class="text-right font-semibold">
+                {{ b.tax | number:'1.0-0' }} đ
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- LỊCH SỬ BÊN PHẢI -->
+  <app-history-sidebar />
+</div>

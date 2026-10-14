@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app-shell",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/index.csr.html",
+          "/*.css",
+          "/*.js",
+          "/manifest.webmanifest",
+          "/omni-calc.svg",
+          "/favicon.ico"
+        ]
+      }
+    }
+  ],
+  "navigationUrls": [
+    "/**",
+    "!/**/*.*",
+    "!/api/**"
+  ]
+}

@@ -1,0 +1,199 @@
+$bg-glass: rgba(22, 24, 32, 0.82);
+$border-glass: rgba(255, 255, 255, 0.1);
+$text-bright: #ffffff;
+$text-sub: #9499ad;
+$text-dark-sub: #5a5f73;
+$transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+  max-width: 980px;
+}
+
+.calc-glass-card {
+  flex: 1 1 440px;
+  max-width: 500px;
+  background: $bg-glass;
+  backdrop-filter: blur(24px);
+  border: 1px solid $border-glass;
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-intro-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 12px 14px;
+
+  .intro-icon { font-size: 1.6rem; }
+  .intro-title { font-size: 1.05rem; font-weight: 700; margin: 0; }
+  .intro-subtitle { font-size: 0.78rem; color: $text-sub; margin: 2px 0 0 0; }
+}
+
+.tax-input-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .input-card {
+    background: rgba(16, 18, 24, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: $transition-smooth;
+
+    &:focus-within {
+      border-color: #ff9f0a;
+      box-shadow: 0 0 0 3px rgba(255, 159, 10, 0.15);
+    }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: $text-sub;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .input-with-currency {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: #ffffff;
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-family: 'SF Mono', monospace;
+        width: 100%;
+      }
+
+      .currency-tag {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #ff9f0a;
+        background: rgba(255, 159, 10, 0.12);
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+    }
+
+    .input-helper {
+      font-size: 0.7rem;
+      color: $text-dark-sub;
+    }
+  }
+}
+
+.tax-metrics-dashboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  .metric-box {
+    background: rgba(16, 18, 24, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    .metric-title { font-size: 0.72rem; color: $text-sub; font-weight: 600; }
+    .metric-number { font-size: 1.05rem; font-weight: 800; font-family: 'SF Mono', monospace; }
+    .metric-sub { font-size: 0.65rem; color: $text-dark-sub; }
+
+    &.box-danger {
+      border-color: rgba(255, 69, 58, 0.35);
+      background: rgba(255, 69, 58, 0.05);
+      .text-danger { color: #ff453a; }
+    }
+
+    &.box-success {
+      border-color: rgba(48, 209, 88, 0.35);
+      background: rgba(48, 209, 88, 0.05);
+      .text-success { color: #30d158; }
+    }
+  }
+}
+
+.glass-table-wrapper {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(12, 14, 18, 0.6);
+
+  .modern-tax-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+
+    th, td {
+      padding: 7px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    th {
+      background: #171922;
+      color: $text-sub;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+
+    tr.highlight-row {
+      background: rgba(255, 159, 10, 0.08);
+      td { color: #ffab26; }
+    }
+
+    .bracket-badge {
+      font-size: 0.7rem;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .rate-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #ff9f0a;
+    }
+
+    .text-right { text-align: right; }
+    .font-semibold { font-weight: 700; font-family: monospace; }
+  }
+}
+
+@media (max-width: 900px) {
+  .page-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .calc-glass-card {
+    width: 100%;
+    max-width: 480px;
+  }
+}

@@ -1,0 +1,635 @@
+<!--
+  =========================================================================================
+  DỰ ÁN: OMNICALC PRO SUITE - GIAO DIỆN CHUẨN UI/UX CAO CẤP
+  FILE: src/app/components/calculator/calculator.component.html
+  BƯỚC 3: TEMPLATE HIỂN THỊ ĐA CHUYÊN NGÀNH
+  =========================================================================================
+-->
+
+<div class="calculator-root-container">
+
+  <!-- ============================================================================== -->
+  <!-- 1. THANH ĐIỀU HƯỚNG PHÂN HỆ DẠNG VIÊN THUỐC (FLOATING SEGMENTED PILL BAR)      -->
+  <!-- ============================================================================== -->
+  <nav class="mode-segmented-bar" aria-label="Lựa chọn chuyên ngành tính toán">
+    <button 
+      type="button" 
+      class="segment-pill-btn" 
+      [class.active]="calcService.activeMode() === 'standard'"
+      (click)="onSwitchMode('standard')"
+    >
+      <span class="pill-icon">🧮</span>
+      <span class="pill-text">Tiêu Chuẩn</span>
+    </button>
+
+    <button 
+      type="button" 
+      class="segment-pill-btn" 
+      [class.active]="calcService.activeMode() === 'casio580'"
+      (click)="onSwitchMode('casio580')"
+    >
+      <span class="pill-icon">🔬</span>
+      <span class="pill-text">Casio 580</span>
+    </button>
+
+    <button 
+      type="button" 
+      class="segment-pill-btn" 
+      [class.active]="calcService.activeMode() === 'tax'"
+      (click)="onSwitchMode('tax')"
+    >
+      <span class="pill-icon">🏛️</span>
+      <span class="pill-text">Thuế TNCN</span>
+    </button>
+
+    <button 
+      type="button" 
+      class="segment-pill-btn" 
+      [class.active]="calcService.activeMode() === 'financial'"
+      (click)="onSwitchMode('financial')"
+    >
+      <span class="pill-icon">💼</span>
+      <span class="pill-text">Kế Toán</span>
+    </button>
+
+    <button 
+      type="button" 
+      class="segment-pill-btn" 
+      [class.active]="calcService.activeMode() === 'graph'"
+      (click)="onSwitchMode('graph')"
+    >
+      <span class="pill-icon">📈</span>
+      <span class="pill-text">Đồ Thị Oxy</span>
+    </button>
+  </nav>
+
+  <!-- ============================================================================== -->
+  <!-- 2. KHUNG TỔNG THỂ 2 CỘT (MAIN CALCULATOR & HISTORY SIDEBAR)                     -->
+  <!-- ============================================================================== -->
+  <div class="calculator-workspace">
+    
+    <!-- KHUNG ĐIỀU KHIỂN CHÍNH (MAIN COMPUTATION CARD) -->
+    <main class="calc-glass-card" aria-label="Bàn tính toán chính">
+      
+      <!-- THANH TRẠNG THÁI TRÊN ĐỈNH THẺ -->
+      <header class="card-status-header">
+        <div class="brand-group">
+          <span class="status-pulse-dot"></span>
+          <span class="brand-name">OmniCalc</span>
+          <span class="badge-mode-pill">
+            @switch (calcService.activeMode()) {
+              @case ('standard') { STANDARD }
+              @case ('casio580') { CASIO fx-580VN X }
+              @case ('tax') { VIETNAM TAX ENGINE }
+              @case ('financial') { ACCOUNTING SUITE }
+              @case ('graph') { 2D FUNCTION GRAPH }
+            }
+          </span>
+        </div>
+
+        <div class="action-buttons-group">
+          @if (calcService.activeMode() === 'casio580') {
+            <button 
+              type="button" 
+              class="btn-tag-toggle" 
+              (click)="sciService.toggleAngleUnit()"
+              title="Đổi đơn vị đo góc giữa DEG và RAD"
+            >
+              {{ sciService.angleUnit() }}
+            </button>
+          }
+
+          <button 
+            type="button" 
+            class="btn-icon-round" 
+            (click)="audioService.toggleSound()"
+            [title]="audioService.isSoundEnabled() ? 'Tắt âm thanh phím bấm' : 'Bật âm thanh phím bấm'"
+          >
+            {{ audioService.isSoundEnabled() ? '🔊' : '🔇' }}
+          </button>
+        </div>
+      </header>
+
+      <!-- ======================================================================== -->
+      <!-- CHUYÊN MỤC 1 & 2: MÁY TÍNH TIÊU CHUẨN & CASIO 580 VN-PLUS                -->
+      <!-- ======================================================================== -->
+      @if (calcService.activeMode() === 'standard' || calcService.activeMode() === 'casio580') {
+        
+        <!-- MÀN HÌNH HIỂN THỊ OLED CHUYÊN NGHIỆP -->
+        <div 
+          class="oled-display-screen" 
+          [class.casio-lcd]="calcService.activeMode() === 'casio580'"
+          (click)="copyToClipboard(calcService.currentValue())"
+          title="Nhấp vào màn hình để sao chép kết quả"
+        >
+          <!-- THANH CHỈ BÁO TRÊN MÀN HÌNH -->
+          <div class="display-top-bar">
+            <div class="indicators-left">
+              @if (calcService.activeMode() === 'casio580') {
+                <span class="lcd-badge">{{ sciService.angleUnit() }}</span>
+                <span class="lcd-badge">MATH</span>
+              }
+              @if (calcService.isMemoryActive()) {
+                <span class="lcd-badge memory-glow">M={{ calcService.memory() }}</span>
+              }
+            </div>
+            
+            <button 
+              type="button" 
+              class="btn-copy-chip" 
+              (click)="$event.stopPropagation(); copyToClipboard(calcService.currentValue())"
+              title="Sao chép vào bộ nhớ tạm"
+            >
+              <span>Sao chép</span>
+              <span class="copy-icon">⎘</span>
+            </button>
+          </div>
+
+          <!-- DÒNG BIỂU THỨC -->
+          <div class="display-expression-row">
+            {{ calcService.expression() || '&nbsp;' }}
+          </div>
+
+          <!-- DÒNG KẾT QUẢ CHÍNH -->
+          <div 
+            class="display-result-row" 
+            [class.error-glow]="calcService.currentValue().includes('Lỗi') || calcService.currentValue().includes('Không thể')"
+          >
+            {{ calcService.currentValue() }}
+          </div>
+        </div>
+
+        <!-- HÀNG PHÍM HÀM KHOA HỌC CASIO 580 -->
+        @if (calcService.activeMode() === 'casio580') {
+          <div class="casio-sci-grid" role="group" aria-label="Bàn phím khoa học Casio 580">
+            <button type="button" class="btn-sci" (click)="onScientificFunction('sin')">sin</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('cos')">cos</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('tan')">tan</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('sqrt')">√x</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('square')">x²</button>
+
+            <button type="button" class="btn-sci" (click)="onScientificFunction('asin')">sin⁻¹</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('acos')">cos⁻¹</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('atan')">tan⁻¹</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('cbrt')">∛x</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('cube')">x³</button>
+
+            <button type="button" class="btn-sci" (click)="onScientificFunction('log10')">log</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('ln')">ln</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('factorial')">n!</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('pi')">π</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('e')">e</button>
+
+            <button type="button" class="btn-sci" (click)="onScientificFunction('pow10')">10ˣ</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('exp')">eˣ</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('reciprocal')">1/x</button>
+            <button type="button" class="btn-sci" (click)="onScientificFunction('abs')">|x|</button>
+            <button type="button" class="btn-sci" (click)="calcService.percentage()">%</button>
+          </div>
+        }
+
+        <!-- BÀN PHÍM CƠ BẢN VỚI HIỆU ỨNG 3D HAPTIC TACTILE -->
+        <div class="tactile-keypad-grid" role="group" aria-label="Bàn phím tính toán">
+          <!-- HÀNG 1: MEMORY REGISTER -->
+          <button type="button" class="key-btn key-mem" (click)="calcService.memoryClear()" [disabled]="!calcService.isMemoryActive()">MC</button>
+          <button type="button" class="key-btn key-mem" (click)="calcService.memoryRead()" [disabled]="!calcService.isMemoryActive()">MR</button>
+          <button type="button" class="key-btn key-mem" (click)="calcService.memorySub()">M-</button>
+          <button type="button" class="key-btn key-mem" (click)="calcService.memoryAdd()">M+</button>
+
+          <!-- HÀNG 2: FUNCTIONS & OPERATOR CHIA -->
+          <button type="button" class="key-btn key-fn key-ac" (click)="calcService.clearAll()">AC</button>
+          <button type="button" class="key-btn key-fn" (click)="calcService.clear()">CE</button>
+          <button type="button" class="key-btn key-fn" (click)="calcService.deleteLast()">⌫</button>
+          <button type="button" class="key-btn key-op" (click)="calcService.setOperator('÷')">÷</button>
+
+          <!-- HÀNG 3: 7, 8, 9, × -->
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('7')">7</button>
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('8')">8</button>
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('9')">9</button>
+          <button type="button" class="key-btn key-op" (click)="calcService.setOperator('×')">×</button>
+
+          <!-- HÀNG 4: 4, 5, 6, - -->
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('4')">4</button>
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('5')">5</button>
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('6')">6</button>
+          <button type="button" class="key-btn key-op" (click)="calcService.setOperator('-')">-</button>
+
+          <!-- HÀNG 5: 1, 2, 3, + -->
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('1')">1</button>
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('2')">2</button>
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('3')">3</button>
+          <button type="button" class="key-btn key-op" (click)="calcService.setOperator('+')">+</button>
+
+          <!-- HÀNG 6: ±, 0, ., = -->
+          <button type="button" class="key-btn key-fn" (click)="calcService.toggleSign()">±</button>
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('0')">0</button>
+          <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('.')">.</button>
+          <button type="button" class="key-btn key-equals" (click)="calcService.calculate()">=</button>
+        </div>
+
+        <footer class="tactile-footer-hints">
+          <span>⌨️ Bàn phím số & Numpad • 🔊 Âm thanh Web Audio API • ⎘ Nhấp số để copy</span>
+        </footer>
+      }
+
+      <!-- ======================================================================== -->
+      <!-- CHUYÊN MỤC 3: PHÂN HỆ TÍNH THUẾ TNCN (TAX ENGINE VIỆT NAM)                 -->
+      <!-- ======================================================================== -->
+      @if (calcService.activeMode() === 'tax') {
+        <div class="interactive-specialized-view">
+          
+          <div class="section-intro-card">
+            <div class="intro-icon">🏛️</div>
+            <div>
+              <h3 class="intro-title">Thuế Thu Nhập Cá Nhân (TNCN)</h3>
+              <p class="intro-subtitle">Tự động tính theo biểu thuế lũy tiến 7 bậc của Luật Thuế TNCN Việt Nam</p>
+            </div>
+          </div>
+
+          <!-- FORM NHẬP LIỆU DẠNG CARDS TƯƠNG TÁC -->
+          <div class="tax-input-cards-grid">
+            <div class="input-card">
+              <label for="grossInput">
+                <span class="icon">💵</span>
+                <span>Thu nhập tháng (Gross):</span>
+              </label>
+              <div class="input-with-currency">
+                <input 
+                  id="grossInput" 
+                  type="number" 
+                  [ngModel]="taxGross()" 
+                  (ngModelChange)="taxGross.set($event)" 
+                  step="1000000"
+                />
+                <span class="currency-tag">VND</span>
+              </div>
+              <span class="input-helper">{{ taxGross() | number:'1.0-0' }} đ / tháng</span>
+            </div>
+
+            <div class="input-card">
+              <label for="depInput">
+                <span class="icon">👥</span>
+                <span>Người phụ thuộc:</span>
+              </label>
+              <div class="input-with-currency">
+                <input 
+                  id="depInput" 
+                  type="number" 
+                  [ngModel]="taxDependentsCount()" 
+                  (ngModelChange)="taxDependentsCount.set($event)" 
+                  min="0" 
+                  max="15"
+                />
+                <span class="currency-tag">Người</span>
+              </div>
+              <span class="input-helper">Giảm trừ: {{ (taxDependentsCount() * 4400000) | number:'1.0-0' }} đ</span>
+            </div>
+
+            <div class="input-card">
+              <label for="insInput">
+                <span class="icon">🛡️</span>
+                <span>Bảo hiểm bắt buộc (10.5%):</span>
+              </label>
+              <div class="input-with-currency">
+                <input 
+                  id="insInput" 
+                  type="number" 
+                  [ngModel]="taxInsuranceAmount()" 
+                  (ngModelChange)="taxInsuranceAmount.set($event)" 
+                  step="500000"
+                />
+                <span class="currency-tag">VND</span>
+              </div>
+              <span class="input-helper">BHXH 8%, BHYT 1.5%, BHTN 1%</span>
+            </div>
+          </div>
+
+          <!-- 3 THẺ TỔNG KẾT TÀI CHÍNH LỚN -->
+          <div class="tax-metrics-dashboard">
+            <div class="metric-box">
+              <span class="metric-title">Thu nhập tính thuế</span>
+              <span class="metric-number text-muted-white">{{ taxReport().taxableIncome | number:'1.0-0' }} đ</span>
+              <span class="metric-sub">Sau khi trừ 11M + Phụ thuộc</span>
+            </div>
+
+            <div class="metric-box box-danger">
+              <span class="metric-title">Thuế TNCN phải nộp</span>
+              <span class="metric-number text-danger">{{ taxReport().totalTax | number:'1.0-0' }} đ</span>
+              <span class="metric-sub">Tổng 7 bậc lũy tiến</span>
+            </div>
+
+            <div class="metric-box box-success">
+              <span class="metric-title">Lương thực nhận (Net)</span>
+              <span class="metric-number text-success">{{ taxReport().netIncome | number:'1.0-0' }} đ</span>
+              <span class="metric-sub">Số tiền về tài khoản ATM</span>
+            </div>
+          </div>
+
+          <!-- BẢNG BIỂU THUẾ 7 BẬC -->
+          <div class="glass-table-wrapper">
+            <table class="modern-tax-table">
+              <thead>
+                <tr>
+                  <th>Bậc</th>
+                  <th>Phạm vi thu nhập</th>
+                  <th>Thuế suất</th>
+                  <th class="text-right">Tiền thuế nộp</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (b of taxReport().brackets; track b.bracket) {
+                  <tr [class.highlight-row]="b.taxableAmount > 0">
+                    <td>
+                      <span class="bracket-badge">Bậc {{ b.bracket }}</span>
+                    </td>
+                    <td>{{ b.taxableAmount | number:'1.0-0' }} đ</td>
+                    <td>
+                      <span class="rate-pill">{{ b.rate }}%</span>
+                    </td>
+                    <td class="text-right font-semibold">
+                      {{ b.tax | number:'1.0-0' }} đ
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      }
+
+      <!-- ======================================================================== -->
+      <!-- CHUYÊN MỤC 4: PHÂN HỆ KẾ TOÁN & TÀI CHÍNH (VAT & LÃI KÉP)                 -->
+      <!-- ======================================================================== -->
+      @if (calcService.activeMode() === 'financial') {
+        <div class="interactive-specialized-view">
+          
+          <!-- SUB-TABS KẾ TOÁN -->
+          <div class="sub-segmented-control">
+            <button 
+              type="button" 
+              class="sub-tab-btn" 
+              [class.active]="financialTab() === 'vat'"
+              (click)="financialTab.set('vat')"
+            >
+              <span>📊 Tính Thuế VAT</span>
+            </button>
+            <button 
+              type="button" 
+              class="sub-tab-btn" 
+              [class.active]="financialTab() === 'compound'"
+              (click)="financialTab.set('compound')"
+            >
+              <span>📈 Tính Lãi Kép & Tiết Kiệm</span>
+            </button>
+          </div>
+
+          <!-- TAB 1: THUẾ VAT -->
+          @if (financialTab() === 'vat') {
+            <div class="fin-card-content">
+              <div class="form-grid-two">
+                <div class="input-card">
+                  <label for="vatAmountInput">Số tiền chưa thuế (VND):</label>
+                  <div class="input-with-currency">
+                    <input 
+                      id="vatAmountInput" 
+                      type="number" 
+                      [ngModel]="vatBaseAmount()" 
+                      (ngModelChange)="vatBaseAmount.set($event)" 
+                      step="500000"
+                    />
+                    <span class="currency-tag">VND</span>
+                  </div>
+                </div>
+
+                <div class="input-card">
+                  <label for="vatSelectRate">Thuế suất VAT:</label>
+                  <select 
+                    id="vatSelectRate" 
+                    [ngModel]="vatRatePercent()" 
+                    (ngModelChange)="vatRatePercent.set($event)"
+                  >
+                    <option [value]="5">5% - Nông sản, thiết bị y tế</option>
+                    <option [value]="8">8% - Chính sách giảm thuế kích cầu</option>
+                    <option [value]="10">10% - Mức thuế suất phổ thông</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- THẺ KẾT QUẢ VAT -->
+              <div class="fin-summary-card">
+                <div class="fin-data-row">
+                  <span class="data-label">Tiền thuế GTGT (VAT):</span>
+                  <strong class="data-value text-orange">{{ vatReport().vatAmount | number:'1.0-0' }} đ</strong>
+                </div>
+                <div class="fin-data-row total-highlight">
+                  <span class="data-label">Tổng thanh toán (Sau thuế):</span>
+                  <strong class="data-value text-success">{{ vatReport().totalWithVat | number:'1.0-0' }} đ</strong>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- TAB 2: LÃI KÉP TIẾT KIỆM -->
+          @if (financialTab() === 'compound') {
+            <div class="fin-card-content">
+              <div class="form-grid-three">
+                <div class="input-card">
+                  <label for="cPrincipal">Số tiền gửi ban đầu:</label>
+                  <div class="input-with-currency">
+                    <input 
+                      id="cPrincipal" 
+                      type="number" 
+                      [ngModel]="compPrincipal()" 
+                      (ngModelChange)="compPrincipal.set($event)" 
+                      step="5000000"
+                    />
+                    <span class="currency-tag">VND</span>
+                  </div>
+                </div>
+
+                <div class="input-card">
+                  <label for="cRate">Lãi suất (%/năm):</label>
+                  <div class="input-with-currency">
+                    <input 
+                      id="cRate" 
+                      type="number" 
+                      [ngModel]="compRate()" 
+                      (ngModelChange)="compRate.set($event)" 
+                      step="0.1"
+                    />
+                    <span class="currency-tag">%</span>
+                  </div>
+                </div>
+
+                <div class="input-card">
+                  <label for="cYears">Kỳ hạn gửi (năm):</label>
+                  <div class="input-with-currency">
+                    <input 
+                      id="cYears" 
+                      type="number" 
+                      [ngModel]="compYears()" 
+                      (ngModelChange)="compYears.set($event)" 
+                      min="1" 
+                      max="40"
+                    />
+                    <span class="currency-tag">Năm</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- THẺ KẾT QUẢ LÃI KÉP -->
+              <div class="fin-summary-card">
+                <div class="fin-data-row">
+                  <span class="data-label">Tổng tiền lãi tích lũy:</span>
+                  <strong class="data-value text-orange">+{{ compoundReport().totalInterest | number:'1.0-0' }} đ</strong>
+                </div>
+                <div class="fin-data-row total-highlight">
+                  <span class="data-label">Tổng nhận về (Gốc + Lãi kép):</span>
+                  <strong class="data-value text-success">{{ compoundReport().futureValue | number:'1.0-0' }} đ</strong>
+                </div>
+              </div>
+            </div>
+          }
+
+        </div>
+      }
+
+      <!-- ======================================================================== -->
+      <!-- CHUYÊN MỤC 5: PHÂN HỆ VẼ ĐỒ THỊ 2D OXY (CANVAS ENGINE)                     -->
+      <!-- ======================================================================== -->
+      @if (calcService.activeMode() === 'graph') {
+        <div class="interactive-specialized-view">
+          
+          <div class="section-intro-card">
+            <div class="intro-icon">📈</div>
+            <div>
+              <h3 class="intro-title">Vẽ Đồ Thị Hàm Số 2D (Oxy)</h3>
+              <p class="intro-subtitle">Dựng hệ trục toạ độ Descartes và nội suy đường cong trên HTML5 Canvas</p>
+            </div>
+          </div>
+
+          <!-- BỘ HÀM MẪU DẠNG PILLS -->
+          <div class="presets-pill-group">
+            <span class="preset-title">Hàm mẫu:</span>
+            <button type="button" class="preset-pill" (click)="selectPresetGraph('x^2 - 4')">y = x² - 4</button>
+            <button type="button" class="preset-pill" (click)="selectPresetGraph('sin(x)')">y = sin(x)</button>
+            <button type="button" class="preset-pill" (click)="selectPresetGraph('x^3 - 3*x')">y = x³ - 3x</button>
+            <button type="button" class="preset-pill" (click)="selectPresetGraph('2*x + 1')">y = 2x + 1</button>
+          </div>
+
+          <!-- THANH NHẬP HÀM SỐ VÀ NÚT VẼ -->
+          <div class="graph-search-bar">
+            <span class="fn-symbol">f(x) =</span>
+            <input 
+              type="text" 
+              [ngModel]="graphExpression()" 
+              (ngModelChange)="graphExpression.set($event)" 
+              (keyup.enter)="renderGraph()"
+              placeholder="Nhập biểu thức hàm số..."
+            />
+            <button type="button" class="btn-primary-draw" (click)="renderGraph()">
+              <span>Vẽ Lại</span>
+              <span>🎨</span>
+            </button>
+          </div>
+
+          <!-- KHUNG CANVAS ĐỒ HỌA -->
+          <div class="canvas-viewport-frame">
+            <canvas #graphCanvas width="420" height="280"></canvas>
+            <div class="canvas-axes-badge">Phạm vi toạ độ: x, y ∈ [-8, 8]</div>
+          </div>
+
+        </div>
+      }
+
+    </main>
+
+    <!-- ============================================================================== -->
+    <!-- KHUNG LỊCH SỬ BÊN PHẢI (HISTORY SIDEBAR CARD)                                 -->
+    <!-- ============================================================================== -->
+    <aside class="calc-glass-sidebar" aria-label="Lịch sử tính toán">
+      
+      <div class="sidebar-header">
+        <div class="header-title-wrap">
+          <span class="clock-icon">🕒</span>
+          <h2 class="title">Lịch Sử Tính</h2>
+          <span class="count-badge">{{ calcService.history().length }}</span>
+        </div>
+
+        <div class="header-actions-wrap">
+          @if (calcService.history().length > 0) {
+            <button 
+              type="button" 
+              class="btn-action-pill btn-export" 
+              (click)="onExportCSV()"
+              title="Xuất file Excel CSV"
+            >
+              <span>📥 CSV</span>
+            </button>
+
+            <button 
+              type="button" 
+              class="btn-action-icon btn-clear" 
+              (click)="onClearHistory()"
+              title="Xóa toàn bộ lịch sử"
+            >
+              <span>🗑️</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- DANH SÁCH CUỘN CÁC MỤC LỊCH SỬ -->
+      <div class="sidebar-scroll-list">
+        @for (item of calcService.history(); track item.id) {
+          <article 
+            class="history-card-item" 
+            (click)="onSelectHistory(item)"
+            tabindex="0"
+            role="button"
+          >
+            <div class="item-meta-row">
+              <span 
+                class="mode-badge-tag"
+                [class.tag-sci]="item.mode === 'casio580'"
+                [class.tag-tax]="item.mode === 'tax'"
+                [class.tag-fin]="item.mode === 'financial'"
+              >
+                {{ item.mode ? item.mode.toUpperCase() : 'STANDARD' }}
+              </span>
+              <time class="meta-time">{{ item.timestamp | date:'HH:mm:ss dd/MM' }}</time>
+            </div>
+
+            <div class="item-expr-row">{{ item.expression }} =</div>
+            <div class="item-result-row">{{ item.result }}</div>
+            
+            <div class="item-hover-actions">
+              <span class="reuse-action">Nạp lại ↵</span>
+            </div>
+          </article>
+        } @empty {
+          <div class="history-empty-illustration">
+            <div class="empty-graphic">📜</div>
+            <h4 class="empty-head">Chưa Có Phép Tính Nào</h4>
+            <p class="empty-desc">Toàn bộ thao tác tính toán sẽ được tự động lưu bền vững vào LocalStorage và có thể xuất ra file Excel CSV bất kỳ lúc nào.</p>
+          </div>
+        }
+      </div>
+
+      <div class="sidebar-footer">
+        <span class="footer-note">⚡ Tự động lưu LocalStorage • Xuất Excel CSV</span>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- THÔNG BÁO TOAST TRƯỢT PHẢN HỒI -->
+  @if (toastMessage()) {
+    <div class="toast-glass-notification" role="status" aria-live="polite">
+      <span class="toast-check">✓</span>
+      <span class="toast-text">{{ toastMessage() }}</span>
+    </div>
+  }
+
+</div>

@@ -1,0 +1,124 @@
+<div class="page-container">
+  <!-- MÁY TÍNH KHOA HỌC CASIO 580 CHÍNH -->
+  <main class="calc-glass-card">
+    <header class="card-status-header">
+      <div class="brand-group">
+        <span class="status-pulse-dot"></span>
+        <span class="brand-name">OmniCalc</span>
+        <span class="badge-mode-pill">CASIO fx-580VN X</span>
+      </div>
+
+      <div class="action-buttons-group">
+        <button 
+          type="button" 
+          class="btn-tag-toggle" 
+          (click)="sciService.toggleAngleUnit()"
+          title="Đổi đơn vị đo góc giữa DEG và RAD"
+        >
+          {{ sciService.angleUnit() }}
+        </button>
+
+        <button 
+          type="button" 
+          class="btn-icon-round" 
+          (click)="audioService.toggleSound()"
+          [title]="audioService.isSoundEnabled() ? 'Tắt âm thanh' : 'Bật âm thanh'"
+        >
+          {{ audioService.isSoundEnabled() ? '🔊' : '🔇' }}
+        </button>
+      </div>
+    </header>
+
+    <!-- MÀN HÌNH LCD CLASSWIZ -->
+    <div class="oled-display-screen casio-lcd" (click)="copyResult()" title="Nhấp vào để sao chép kết quả">
+      <div class="display-top-bar">
+        <div class="indicators-left">
+          <span class="lcd-badge">{{ sciService.angleUnit() }}</span>
+          <span class="lcd-badge">MATH</span>
+          @if (calcService.isMemoryActive()) {
+            <span class="lcd-badge memory-glow">M={{ calcService.memory() }}</span>
+          }
+        </div>
+        <button type="button" class="btn-copy-chip" (click)="$event.stopPropagation(); copyResult()">
+          <span>Sao chép</span>
+          <span class="copy-icon">⎘</span>
+        </button>
+      </div>
+
+      <div class="display-expression-row">
+        {{ calcService.expression() || '&nbsp;' }}
+      </div>
+
+      <div class="display-result-row" [class.error-glow]="calcService.currentValue().includes('Lỗi') || calcService.currentValue().includes('Không thể')">
+        {{ calcService.currentValue() }}
+      </div>
+    </div>
+
+    <!-- HÀNG PHÍM HÀM KHOA HỌC CASIO (20 PHÍM 5 CỘT) -->
+    <div class="casio-sci-grid" role="group" aria-label="Bàn phím hàm khoa học">
+      <button type="button" class="btn-sci" (click)="onScientificFunction('sin')">sin</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('cos')">cos</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('tan')">tan</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('sqrt')">√x</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('square')">x²</button>
+
+      <button type="button" class="btn-sci" (click)="onScientificFunction('asin')">sin⁻¹</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('acos')">cos⁻¹</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('atan')">tan⁻¹</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('cbrt')">∛x</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('cube')">x³</button>
+
+      <button type="button" class="btn-sci" (click)="onScientificFunction('log10')">log</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('ln')">ln</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('factorial')">n!</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('pi')">π</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('e')">e</button>
+
+      <button type="button" class="btn-sci" (click)="onScientificFunction('pow10')">10ˣ</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('exp')">eˣ</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('reciprocal')">1/x</button>
+      <button type="button" class="btn-sci" (click)="onScientificFunction('abs')">|x|</button>
+      <button type="button" class="btn-sci" (click)="calcService.percentage()">%</button>
+    </div>
+
+    <!-- BÀN PHÍM CƠ BẢN -->
+    <div class="tactile-keypad-grid" role="group" aria-label="Bàn phím cơ bản">
+      <button type="button" class="key-btn key-mem" (click)="calcService.memoryClear()" [disabled]="!calcService.isMemoryActive()">MC</button>
+      <button type="button" class="key-btn key-mem" (click)="calcService.memoryRead()" [disabled]="!calcService.isMemoryActive()">MR</button>
+      <button type="button" class="key-btn key-mem" (click)="calcService.memorySub()">M-</button>
+      <button type="button" class="key-btn key-mem" (click)="calcService.memoryAdd()">M+</button>
+
+      <button type="button" class="key-btn key-fn key-ac" (click)="calcService.clearAll()">AC</button>
+      <button type="button" class="key-btn key-fn" (click)="calcService.clear()">CE</button>
+      <button type="button" class="key-btn key-fn" (click)="calcService.deleteLast()">⌫</button>
+      <button type="button" class="key-btn key-op" (click)="calcService.setOperator('÷')">÷</button>
+
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('7')">7</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('8')">8</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('9')">9</button>
+      <button type="button" class="key-btn key-op" (click)="calcService.setOperator('×')">×</button>
+
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('4')">4</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('5')">5</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('6')">6</button>
+      <button type="button" class="key-btn key-op" (click)="calcService.setOperator('-')">-</button>
+
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('1')">1</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('2')">2</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('3')">3</button>
+      <button type="button" class="key-btn key-op" (click)="calcService.setOperator('+')">+</button>
+
+      <button type="button" class="key-btn key-fn" (click)="calcService.toggleSign()">±</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('0')">0</button>
+      <button type="button" class="key-btn key-num" (click)="calcService.appendDigit('.')">.</button>
+      <button type="button" class="key-btn key-equals" (click)="calcService.calculate()">=</button>
+    </div>
+
+    <footer class="tactile-footer-hints">
+      <span>⌨️ Bàn phím số & Numpad • 🔬 Lượng giác DEG/RAD • 🔊 Web Audio API</span>
+    </footer>
+  </main>
+
+  <!-- LỊCH SỬ BÊN PHẢI -->
+  <app-history-sidebar />
+</div>
