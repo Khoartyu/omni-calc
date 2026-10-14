@@ -42,3 +42,17 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+# Additional Angular build output
+/e2e/test-output/
+/.angular/
+.angular/
+/.ng/
+/.angular-cli.json
+
+# Environment files and TypeScript cache
+/.env
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
