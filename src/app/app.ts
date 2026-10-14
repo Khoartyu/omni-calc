@@ -19,7 +19,7 @@ import { ToastService } from './services/shared/toast.service';
   styleUrl: './app.scss'
 })
 export class App {
-  public readonly appTitle = 'OmniCalc Pro Suite';
+  public readonly appTitle = 'OmniCalc - Máy tính cá nhân online';
   public readonly toastService = inject(ToastService);
   public readonly themeService = inject(ThemeService);
 

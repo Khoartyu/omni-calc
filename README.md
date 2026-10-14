@@ -1,17 +1,17 @@
-# 🧮 OmniCalc Pro Suite - Nền Tảng Tính Toán Đa Chuyên Ngành (Page-Based Static Web App)
+# OmniCalc - Máy tính cá nhân online
 
 > **Báo cáo Đồ án Chuyên ngành Công nghệ Thông tin / Kỹ thuật Phần mềm**  
 > **Kiến trúc:** MVVM (Model - View - ViewModel) & Page-Based Routing (Angular Standalone Routes)  
 > **Nền tảng:** Angular v17+ (Signals, Lazy-loaded Routes, Component Composition) & SCSS  
 > **Hệ thống 5 Trang Độc Lập:** Tiêu Chuẩn (`/standard`), Casio fx-580VN X (`/casio580`), Thuế TNCN (`/tax`), Kế Toán (`/financial`), Đồ Thị 2D (`/graph`)  
-> **Trạng thái triển khai:** 100% Client-Side Static SPA (Prerendered 5 Static Routes, Zero Backend Server)  
-> **Live Demo:** [Link sẽ cập nhật sau]
+> **Trạng thái triển khai:** Ứng dụng Angular prerender tĩnh, không cần backend
+> **Live Demo:** [Mở OmniCalc](https://khoartyu.github.io/omni-calc/)
 
 ---
 
 ## 📌 1. Giới Thiệu Tổng Quan Đồ Án
 
-**OmniCalc Pro Suite** là một hệ sinh thái tính toán số học đa chuyên ngành trực tuyến hoạt động hoàn toàn phía Client (Static Web App). Dự án được cấu trúc theo mô hình **Đa trang độc lập (Page-Based Routing)**, cho phép người dùng truy cập trực tiếp qua các đường dẫn tĩnh (Static URLs) hoặc chuyển đổi mượt mà bằng thanh điều hướng viên thuốc (Segmented Pill Bar).
+**OmniCalc** là máy tính cá nhân online, tập hợp các công cụ tính toán thường dùng trong một không gian riêng tư trên trình duyệt. Lịch sử, công thức và tùy chọn được lưu trên thiết bị; ứng dụng không cần tài khoản hay backend. Người dùng có thể chuyển giữa các chế độ tiêu chuẩn, khoa học, thuế, tài chính và đồ thị.
 
 Ứng dụng chia thành 5 trang chuyên biệt:
 1. **Trang Máy Tính Tiêu Chuẩn (`/standard`):** Tính toán đại số cơ bản hàng ngày, sửa sai số thực **IEEE 754** (`0.1 + 0.2 = 0.3`), chống chia cho 0, bộ nhớ đệm M+/M-/MR/MC.
