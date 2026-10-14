@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, HostListener, computed, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { CalculatorService } from '../../services/calculator/calculator.service';
 import { ExportService } from '../../services/shared/export.service';
@@ -39,6 +39,7 @@ import { HistoryItem } from '../../models/history.model';
 export class HistorySidebarComponent {
   public readonly calcService   = inject(CalculatorService);
   private readonly exportService = inject(ExportService);
+  public readonly isHistoryOpen = signal(false);
   public readonly searchQuery = signal('');
   public readonly visibleHistory = computed(() => {
     const query = this.searchQuery().trim().toLocaleLowerCase();
@@ -57,6 +58,19 @@ export class HistorySidebarComponent {
   /** Toast message hiển thị thông báo phản hồi tạm thời sau các thao tác. */
   public readonly toastMessage = signal<string>('');
 
+  public openHistory(): void {
+    this.isHistoryOpen.set(true);
+  }
+
+  public closeHistory(): void {
+    this.isHistoryOpen.set(false);
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  public onDocumentKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') this.closeHistory();
+  }
+
   /**
    * Xử lý khi người dùng click vào một mục lịch sử.
    * Nạp kết quả lên màn hình để người dùng có thể tiếp tục tính toán.
@@ -65,6 +79,7 @@ export class HistorySidebarComponent {
    */
   public onSelectHistory(item: HistoryItem): void {
     this.calcService.selectHistoryItem(item);
+    this.closeHistory();
     this.showToast(`Đã nạp lại kết quả: ${item.result}`);
   }
 

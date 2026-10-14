@@ -163,3 +163,16 @@ $transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     max-width: 480px;
   }
 }
+
+:host-context(body.theme-light) .fin-summary-card .fin-data-row .text-orange {
+  color: #925000;
+}
+
+:host-context(body.theme-light) .fin-summary-card .fin-data-row .text-success {
+  color: #16703a;
+}
+
+:host-context(body.theme-light) .input-card .input-with-currency input,
+:host-context(body.theme-light) .input-card select {
+  color: #172132;
+}

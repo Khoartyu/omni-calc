@@ -21,6 +21,355 @@ html, body {
   overflow-x: hidden;
 }
 
+body.theme-dark {
+  color-scheme: dark;
+}
+
+body.theme-dark .input-helper,
+body.theme-dark .metric-sub,
+body.theme-dark .history-card-item .meta-time,
+body.theme-dark .history-empty-illustration .empty-desc,
+body.theme-dark .sidebar-footer,
+body.theme-dark .formula-help,
+body.theme-dark .empty-state,
+body.theme-dark .dialog-kicker,
+body.theme-dark .section-heading span {
+  color: #aab3c2;
+}
+
+body.theme-light {
+  background-color: #edf3fb;
+  color: #172132;
+  color-scheme: light;
+}
+
+body.theme-light .calculator-root-container,
+body.theme-light .page-container {
+  color: #172132;
+}
+
+body.theme-light .calculator-root-container .text-muted-white,
+body.theme-light .metric-title,
+body.theme-light .metric-sub,
+body.theme-light .text-muted-white,
+body.theme-light .history-card-item .item-expr-row,
+body.theme-light .history-card-item .meta-time,
+body.theme-light .history-empty-illustration .empty-desc,
+body.theme-light .sidebar-footer,
+body.theme-light .input-helper,
+body.theme-light .formula-help,
+body.theme-light .empty-state,
+body.theme-light .dialog-kicker,
+body.theme-light .section-heading span,
+body.theme-light .preset-title,
+body.theme-light .section-intro-card .intro-subtitle {
+  color: #526173;
+}
+
+body.theme-light .calc-glass-card,
+body.theme-light .calc-glass-sidebar {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.1);
+  color: #172132;
+}
+
+body.theme-light .input-card,
+body.theme-light .metric-box,
+body.theme-light .fin-summary-card,
+body.theme-light .history-card-item,
+body.theme-light .sub-segmented-control,
+body.theme-light .glass-table-wrapper {
+  background-color: #f5f8fc;
+  border-color: rgba(15, 23, 42, 0.1);
+  color: #172132;
+}
+
+body.theme-light .input-card label,
+body.theme-light .fin-data-row,
+body.theme-light .section-intro-card p {
+  color: #526173;
+}
+
+body.theme-light .input-card input,
+body.theme-light .input-card select,
+body.theme-light .history-search,
+body.theme-light .history-personal-fields input {
+  color: #172132;
+  border-color: rgba(15, 23, 42, 0.14);
+}
+
+body.theme-light .input-card select option {
+  background: #ffffff;
+  color: #172132;
+}
+
+body.theme-light .history-search,
+body.theme-light .history-personal-fields input {
+  background: #ffffff;
+}
+
+body.theme-light .history-card-item .item-meta-row .meta-time,
+body.theme-light .history-empty-illustration .empty-desc,
+body.theme-light .sidebar-footer {
+  color: #64748b;
+}
+
+body.theme-light .history-card-item .history-main-button,
+body.theme-light .fin-data-row.total-highlight {
+  color: #172132;
+}
+
+body.theme-light .history-card-item .item-result-row,
+body.theme-light .text-success {
+  color: #16703a;
+}
+
+body.theme-light .text-danger {
+  color: #b42318;
+}
+
+body.theme-light .text-orange,
+body.theme-light .rate-pill,
+body.theme-light .currency-tag {
+  color: #925000;
+}
+
+body.theme-light .history-tag {
+  color: #175985;
+}
+
+body.theme-light .mode-badge-tag.tag-sci { color: #17649a; }
+body.theme-light .mode-badge-tag.tag-tax { color: #925000; }
+body.theme-light .mode-badge-tag.tag-fin { color: #216b3a; }
+
+body.theme-light .input-card,
+body.theme-light .metric-box,
+body.theme-light .fin-summary-card,
+body.theme-light .history-card-item,
+body.theme-light .sub-segmented-control,
+body.theme-light .glass-table-wrapper,
+body.theme-light .section-intro-card {
+  background-color: #f5f8fc;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+body.theme-light .preset-pill {
+  background: #edf2f8;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #334155;
+}
+
+body.theme-light .graph-search-bar {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.14);
+}
+
+body.theme-light .graph-search-bar input {
+  color: #172132;
+}
+
+body.theme-light .formula-dialog {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.14);
+  color: #172132;
+}
+
+body.theme-light .formula-dialog .dialog-header,
+body.theme-light .formula-dialog .formula-column {
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+body.theme-light .formula-dialog label,
+body.theme-light .formula-dialog .formula-select {
+  color: #334155;
+}
+
+body.theme-light .formula-dialog input {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.16);
+  color: #172132;
+}
+
+body.theme-light .formula-dialog input::placeholder {
+  color: #64748b;
+}
+
+body.theme-light .formula-dialog .formula-row {
+  background: #f1f5f9;
+}
+
+body.theme-light .formula-dialog .formula-row.is-selected {
+  background: #effaf2;
+}
+
+body.theme-light .formula-dialog code,
+body.theme-light .formula-dialog .expression-preview {
+  color: #216b3a;
+}
+
+body.theme-light .formula-open-button,
+body.theme-light .primary-button,
+body.theme-light .apply-button {
+  color: #713b00;
+}
+
+body.theme-light .result-output span { color: #216b3a; }
+body.theme-light .formula-run-column label span { color: #925000; }
+
+body.theme-light .modern-tax-table th {
+  background: #e8eef6;
+  color: #425168;
+}
+
+body.theme-light .modern-tax-table td {
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+body.theme-light .modal-card {
+  background: #ffffff;
+  color: #172132;
+}
+
+body.theme-light .toast-glass-notification {
+  bottom: calc(82px + env(safe-area-inset-bottom));
+}
+
+@media (max-width: 640px) {
+  .app-layout,
+  .app-content,
+  .page-container {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .page-container {
+    flex-direction: column;
+  }
+
+  .page-container .calc-glass-card {
+    flex: 0 1 auto;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .page-container .calc-glass-sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+body.theme-light .page-container .calc-glass-card .input-card {
+  background: #f5f8fc;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #172132;
+}
+
+body.theme-light .page-container .calc-glass-card .input-card label,
+body.theme-light .page-container .calc-glass-card .input-helper {
+  color: #526173;
+}
+
+body.theme-light .page-container .calc-glass-card .input-card input,
+body.theme-light .page-container .calc-glass-card .input-card select {
+  color: #172132;
+}
+
+body.theme-light .page-container .calc-glass-card .tax-metrics-dashboard .metric-box {
+  background: #f5f8fc;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+body.theme-light .page-container .calc-glass-card .tax-metrics-dashboard .metric-title,
+body.theme-light .page-container .calc-glass-card .tax-metrics-dashboard .metric-sub {
+  color: #526173;
+}
+
+body.theme-light .page-container .calc-glass-card .tax-metrics-dashboard .text-muted-white {
+  color: #334155;
+}
+
+body.theme-light .page-container .calc-glass-card .tax-metrics-dashboard .box-danger .text-danger {
+  color: #b42318;
+}
+
+body.theme-light .page-container .calc-glass-card .tax-metrics-dashboard .box-success .text-success {
+  color: #16703a;
+}
+
+body.theme-light .page-container .calc-glass-card .glass-table-wrapper {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+body.theme-light .page-container .calc-glass-card .modern-tax-table th {
+  background: #e8eef6;
+  color: #425168;
+}
+
+body.theme-light .page-container .calc-glass-card .modern-tax-table tr.highlight-row td,
+body.theme-light .page-container .calc-glass-card .modern-tax-table .rate-pill {
+  color: #925000;
+}
+
+body.theme-light .page-container .calc-glass-card .fin-summary-card .fin-data-row {
+  color: #526173;
+}
+
+body.theme-light .page-container .calc-glass-card .fin-summary-card .total-highlight {
+  color: #172132;
+  border-color: rgba(15, 23, 42, 0.14);
+}
+
+body.theme-light .page-container .calc-glass-card .fin-summary-card .text-orange {
+  color: #925000;
+}
+
+body.theme-light .page-container .calc-glass-card .fin-summary-card .text-success {
+  color: #16703a;
+}
+
+body.theme-light .page-container .calc-glass-card .section-intro-card {
+  background: #f5f8fc;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+body.theme-light .page-container .calc-glass-card .section-intro-card .intro-title {
+  color: #172132;
+}
+
+body.theme-light .page-container .calc-glass-card .section-intro-card .intro-subtitle {
+  color: #526173;
+}
+
+body.theme-light .page-container .calc-glass-card .presets-pill-group .preset-title {
+  color: #526173;
+}
+
+body.theme-light .page-container .calc-glass-card .presets-pill-group .preset-pill {
+  background: #edf2f8;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #334155;
+}
+
+body.theme-light .page-container .calc-glass-card .graph-search-bar {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.14);
+}
+
+body.theme-light .page-container .calc-glass-card .graph-search-bar input {
+  color: #172132;
+}
+
+body.theme-light .page-container .calc-glass-card .sub-segmented-control .sub-tab-btn:not(.active) {
+  color: #526173;
+}
+
+body.theme-light .page-container .calc-glass-card .sub-segmented-control .sub-tab-btn.active {
+  color: #854900;
+}
+
 button {
   font-family: inherit;
 }

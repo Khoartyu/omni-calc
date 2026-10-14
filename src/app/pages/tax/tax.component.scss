@@ -197,3 +197,31 @@ $transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     max-width: 480px;
   }
 }
+
+:host-context(body.theme-light) .tax-metrics-dashboard .metric-title,
+:host-context(body.theme-light) .tax-metrics-dashboard .metric-sub,
+:host-context(body.theme-light) .input-helper {
+  color: #526173;
+}
+
+:host-context(body.theme-light) .tax-metrics-dashboard .metric-box .text-muted-white {
+  color: #334155;
+}
+
+:host-context(body.theme-light) .tax-metrics-dashboard .box-danger .text-danger {
+  color: #b42318;
+}
+
+:host-context(body.theme-light) .tax-metrics-dashboard .box-success .text-success {
+  color: #16703a;
+}
+
+:host-context(body.theme-light) .modern-tax-table .rate-pill,
+:host-context(body.theme-light) .modern-tax-table tr.highlight-row td {
+  color: #925000;
+}
+
+:host-context(body.theme-light) .input-card .input-with-currency input,
+:host-context(body.theme-light) .input-card select {
+  color: #172132;
+}
